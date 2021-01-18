@@ -1,0 +1,23 @@
+{
+  "name": "daily_chirp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wyao905/daily_chirp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wyao905/daily_chirp/issues"
+  },
+  "homepage": "https://github.com/wyao905/daily_chirp#readme",
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}

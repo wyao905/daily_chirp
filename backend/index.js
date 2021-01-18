@@ -1,50 +1,38 @@
 const Twitter = require('twitter')
 const express = require('express')
+const cors = require('cors')
+const fetch = require('node-fetch')
 require('dotenv/config')
 
-const apiKey = process.env.apiKey
-const apiKeySecret = process.env.apiKeySecret
-const accessToken = process.env.accessToken
-const accessTokenSecret = process.env.accessTokenSecret
-const bearerToken = process.env.bearerToken
+const twitterApiKey = process.env.twitterApiKey
+const twitterApiKeySecret = process.env.twitterApiKeySecret
+const twitterAccessToken = process.env.twitterAccessToken
+const twitterAccessTokenSecret = process.env.twitterAccessTokenSecret
+const mapQuestApiKey = process.env.mapQuestConsumerKey
 
 const app = express()
-const client = new Twitter({
-    consumer_key: apiKey,
-    consumer_secret: apiKeySecret,
-    access_token_key: accessToken,
-    access_token_secret: accessTokenSecret
-    // bearer_token: bearerToken
+const twitterClient = new Twitter({
+    consumer_key: twitterApiKey,
+    consumer_secret: twitterApiKeySecret,
+    access_token_key: twitterAccessToken,
+    access_token_secret: twitterAccessTokenSecret
 })
 
 app.use(express.json())
+app.use(cors())
 
-app.get('/', (req, res) => {
-    client.get('search/tweets', { geocode: '34.0522,118.2437,10mi' }, (error, tweets) => {
-        if (error) throw error
-        res.send(tweets)
-    })
+app.get('/:location/:distance', (req, res) => {
+    fetch(`http://open.mapquestapi.com/geocoding/v1/address?key=${mapQuestApiKey}&location=${req.params.location}`)
+        .then(response => { return response.json() })
+        .then(data => {
+            let lat = data.results[0].locations[0].latLng.lat
+            let lng = data.results[0].locations[0].latLng.lng
+            twitterClient.get('search/tweets', { geocode: `${lat},${lng},${req.params.distance}km` }, (error, tweets) => {
+                if (error) throw error
+                res.send(tweets.statuses)
+            })
+        })
 })
 
-// app.get('/tweets', (req, res) => {
-//     res.send('tweets')
-// })
-
-// parameters
-// app.get('/tweets/:id', (req, res) => {
-//     res.send(req.params.id)
-// })
-
-// post
-// app.post('/api/courses', (req, res) => {
-//     const course = {
-//         id: courses.length + 1,
-//         name: req.body.name
-//     }
-//     res.send(course)
-// })
-
-
-
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 4000
 app.listen(port)

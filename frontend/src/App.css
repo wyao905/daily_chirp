@@ -1,0 +1,32 @@
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+.App {
+  text-align: center;
+  background-color: #00acee;
+  height: 100%;
+}
+
+.wrapper {
+  margin: auto;
+  max-width: 1000px;
+  min-height: 100vh;
+  height: 100%;
+  border: solid rgb(204, 214, 221) 1px;
+  background-color: #ffffff;
+}
+
+.input {
+  outline: none;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: solid rgb(204, 214, 221) 1px;
+  margin-right: 12px;
+  height: 24px;
+}
+
+#search-button {
+  outline: none;
+}
